@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html   lang="tr"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Siparis Verme Sayfası</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <script type="text/javascript" src="webjars/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Milatcam Sipariş Takip Sistemi</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/home">Anasayfa</a></li>
+            <li><a href="/users">Kullanıcılar</a></li>
+            <li class="active"><a href="/items/add">Sipariş Ver</a></li>
+            <li><a href="/items">Siparişler</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="isAnonymous()"><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Kayıt Ol</a></li>
+            <li sec:authorize="isAnonymous()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Giriş</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/users/} + ${user.id} + @{/items}">Siparişlerim</a></li>
+            <li th:if="${#authorization.expression('isAuthenticated()')}">
+                <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                </a>
+                <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h3>Sipariş Girdileri</h3>
+
+    <form th:action="@{/items}" th:object="${itemForm}" th:method="post">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon "></i>Ürün Adı</span>
+            <input type="text" th:field="*{itemName}" class="form-control" >
+            <td th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}">Item Name Error will appear here</td>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon "></i>Ürün Tipi</span>
+            <input type="text" th:field="*{itemType}" class="form-control" >
+            <td th:if="${#fields.hasErrors('itemType')}" th:errors="*{itemType}">Item Type Error will appear here</td>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon "></i>Uzunluk</span>
+            <input type="text" th:field="*{itemlength}" class="form-control" >
+            <td th:if="${#fields.hasErrors('itemlength')}" th:errors="*{itemlength}">Item Length Error will appear here</td>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon "></i>Genişlik</span>
+            <input type="text" th:field="*{itemwidth}" class="form-control" >
+            <td th:if="${#fields.hasErrors('itemwidth')}" th:errors="*{itemwidth}">Item Width Error will appear here</td>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon "></i>Ürün Adedi</span>
+            <input type="text" th:field="*{amount}" class="form-control" >
+            <td th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error will appear here</td>
+        </div>
+        <button type="submit" class="btn btn-default btn-block">
+            <span class="glyphicon glyphicon-edit"></span> Ekle
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

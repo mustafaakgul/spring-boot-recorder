@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html   lang="tr"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <title>Siparişler</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <script type="text/javascript" src="webjars/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Milatcam Sipariş Takip Sistemi</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/home">Anasayfa</a></li>
+            <li><a href="/users">Kullanıcılar</a></li>
+            <li><a href="/items/add">Sipariş Ver</a></li>
+            <li class="active"><a href="/items">Siparişler</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="isAnonymous()"><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Kayıt Ol</a></li>
+            <li sec:authorize="isAnonymous()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Giriş</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/users/} + ${user.id} + @{/items}">Siparişlerim</a></li>
+            <li th:if="${#authorization.expression('isAuthenticated()')}">
+                <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                </a>
+                <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <div class="card-block">
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Sipariş Kodu</th>
+        <th>Sipariş İsmi</th>
+        <th>Sipariş Tipi</th>
+        <th>Ürün Uzunluğu</th>
+        <th>Ürün Genişliği</th>
+        <th>Atama</th>
+        <th>Müşteri</th>
+        <th>Düzenle</th>
+        <th>Sil</th>
+    </tr>
+    </thead>
+
+    <tbody th:each="item : ${items}">
+    <tr>
+        <td th:text="${item.inventoryCode}">Item code will appear here</td>
+        <td th:text="${item.name}">Item name will appear here</td>
+        <td th:text="${item.type}">Item type will appear here</td>
+        <td th:text="${item.length}">Item length will appear here</td>
+        <td th:text="${item.width}">Item width will appear here</td>
+        <td th:text="${item.user.username}">Belongs to</td>
+        <td>
+            <form th:action="@{/items/} + ${item.id}" th:method="put">
+                <select th:field="*{assignForm.username}">
+                    <option th:each="username : ${usernames}"
+                            th:value="${username}"
+                            th:text="${username}">Username will appear here
+                    </option>
+                </select>
+                <button type="submit">Atama</button>
+            </form>
+        </td>
+        <td>
+            <a  class="btn btn-primary">Düzenle</a>
+        </td>
+        <td>
+            <form class="btn btn-warning" th:action="@{/items/}  +  ${item.id}" th:method="delete">
+                <button type="submit">Sil</button>
+            </form>
+        </td>
+    </tbody>
+</table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
