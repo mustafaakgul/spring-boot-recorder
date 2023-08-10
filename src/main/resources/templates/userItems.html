@@ -30,7 +30,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li sec:authorize="isAnonymous()"><a th:href="@{/register}"><span class="glyphicon glyphicon-user"></span> Kayıt Ol</a></li>
             <li sec:authorize="isAnonymous()"><a th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Giriş</a></li>
-            <li class="active" sec:authorize="isAuthenticated()"><a th:href="@{/users/} + ${user.id} + @{/items}">Siparişlerim</a></li>
+            <!--<li sec:authorize="isAuthenticated()"><a th:href="@{/users/} + ${{user.id}} + @{/items}">Siparişlerim</a></li>-->
             <li th:if="${#authorization.expression('isAuthenticated()')}">
                 <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
